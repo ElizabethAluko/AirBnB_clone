@@ -4,7 +4,7 @@
 import uuid
 from datetime import datetime
 
-from models import storage
+import models
 
 
 class BaseModel:
@@ -21,7 +21,7 @@ class BaseModel:
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
-            storage.new(self)
+            models.storage.new(self)
     def __str__(self):
         """String representation of the base model"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
@@ -31,7 +31,7 @@ class BaseModel:
         save/update the public attribute `updated_at` with current time.
         """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """Serializes object and return its dictionary"""

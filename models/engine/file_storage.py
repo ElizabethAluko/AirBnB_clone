@@ -4,14 +4,6 @@ import datetime
 import json
 import os
 
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
-
 
 class FileStorage:
     """Store/Retrieve Data"""
@@ -24,7 +16,7 @@ class FileStorage:
 
     def new(self, obj):
         """Set the obj in __objects"""
-        key "{}.{}".format(type(obj).__name__, obj.id)
+        key = "{}.{}".format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -35,6 +27,13 @@ class FileStorage:
 
     def classes(self):
         """Returns a dictionary of valid classesand their references"""
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.review import Review
 
         classes = {"BaseModel": BaseModel,
                    "User": User,
@@ -52,7 +51,7 @@ class FileStorage:
         with open(FileStrage.__file_path, "r", encoding="utf-8") as f:
             obj_dict = json.load(f)
             obj_dict = {k: self.classes()[v["__class__"]](**v)
-                    for k, v kn obj_dict.items()}
+                    for k, v in obj_dict.items()}
             FieStorage.__objects = obj_dict
 
     def attributes(self):
