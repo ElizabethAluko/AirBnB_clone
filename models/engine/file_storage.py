@@ -4,6 +4,14 @@ import datetime
 import json
 import os
 
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
+
 
 class FileStorage:
     """Store/Retrieve Data"""
@@ -27,13 +35,6 @@ class FileStorage:
 
     def classes(self):
         """Returns a dictionary of valid classesand their references"""
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.place import Place
-        from models.review import Review
 
         classes = {"BaseModel": BaseModel,
                    "User": User,
@@ -48,11 +49,12 @@ class FileStorage:
         """Reloads the stored objects"""
         if not os.path.isfile(FileStorage.__file_path):
             return
-        with open(FileStrage.__file_path, "r", encoding="utf-8") as f:
-            obj_dict = json.load(f)
-            obj_dict = {k: self.classes()[v["__class__"]](**v)
-                    for k, v in obj_dict.items()}
-            FieStorage.__objects = obj_dict
+        with open(FileStorage.__file_path) as f:
+                obj_dict = json.load(f)
+                for obj in obj_dict.values():
+                    cls_name = obj["__class__"]
+                    del obj["__class__"]
+                    self.new(eval(cls_name)(**obj))
 
     def attributes(self):
         """Returns attributes and their types"""
