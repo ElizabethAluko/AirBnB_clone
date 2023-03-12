@@ -44,7 +44,7 @@ class FileStorage:
                    "Place": Place,
                    "Review": Review}
         return classes
-    
+
     def reload(self):
         """Reloads the stored objects"""
         if not os.path.isfile(FileStorage.__file_path):
