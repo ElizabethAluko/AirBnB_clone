@@ -4,7 +4,7 @@
 import uuid
 from datetime import datetime
 
-import models
+from models import storage
 
 
 class BaseModel:
@@ -14,14 +14,16 @@ class BaseModel:
         """Instatiate a new object"""
         if kwargs:
             for key, value in kwargs.items():
-                if key in ["created_at", "updated_at"]:
-                    setattr(self, key, datetime.fromisoformat(value))
+                if key != "__class__":
+                    if key in ["created_at", "updated_at"]:
+                        setattr(self, key, datetime.fromisoformat(value))
                 else:
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
-            models.storage.new(self)
+            storage.new(self)
+
     def __str__(self):
         """String representation of the base model"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
@@ -31,7 +33,7 @@ class BaseModel:
         save/update the public attribute `updated_at` with current time.
         """
         self.updated_at = datetime.now()
-        models.storage.save()
+        storage.save()
 
     def to_dict(self):
         """Serializes object and return its dictionary"""
