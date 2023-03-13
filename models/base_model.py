@@ -29,18 +29,6 @@ class BaseModel():
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
 
-        if len(kwargs) != 0:
-            tform = "%Y-%m-%dT%H:%M:%S.%f"
-            for k, v in kwargs.items():
-                if k == "created_at" or k == "updated_at":
-                    self.__dict__[k] = datetime.strptime(v, tform)
-                else:
-                    self.__dict__[k] = v
-        else:
-            models.storage.new(self)
-
-    def __str__(self):
-        ''' returns a formated string '''
         return ("[{}] ({}) {}".format(self.__class__.__name__,
                 self.id, self.__dict__))
 
@@ -49,7 +37,6 @@ class BaseModel():
             current datetime
         '''
         self.updated_at = datetime.now()
-        models.storage.save()
 
     def to_dict(self):
         '''
