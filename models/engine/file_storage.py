@@ -40,7 +40,7 @@ class FileStorage:
                    "User": User,
                    "State": State,
                    "City": City,
-                   "Aminity": Amenity,
+                   "Amenity": Amenity,
                    "Place": Place,
                    "Review": Review}
         return classes
@@ -49,12 +49,11 @@ class FileStorage:
         """Reloads the stored objects"""
         if not os.path.isfile(FileStorage.__file_path):
             return
-        with open(FileStorage.__file_path) as f:
+        with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 obj_dict = json.load(f)
-                for obj in obj_dict.values():
-                    cls_name = obj["__class__"]
-                    del obj["__class__"]
-                    self.new(eval(cls_name)(**obj))
+                obj_dict = {k: self.classes()[v["__class__"]](**v)
+                        for k, v in obj_dict.items()}
+                FileStorage.__objects = obj_dict
 
     def attributes(self):
         """Returns attributes and their types"""
