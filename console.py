@@ -32,7 +32,7 @@ class HBNBCommand(cmd.Cmd):
         elif line not in storage.classes():
             print("** class doesn't exist **")
         else:
-            ins = storage.classe()[line]()
+            ins = storage.classes()[line]()
             ins.save()
             print(ins.id)
 
@@ -87,7 +87,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """Updates an instance"""
-
 
 
 
